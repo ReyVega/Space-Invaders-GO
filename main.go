@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"math/rand"
+	"os"
 	"sync/atomic"
 	"time"
 
@@ -88,19 +89,22 @@ func (p *spaceShip) actions() { // for spaceShip (player)
 			p.alive = false
 			ms.registerChannel <- msg{cmd: "Remove", p: *p}
 			if p.kind == "Gun" {
-				fmt.Println("You lose :(")
 				fmt.Println("Damn and blast")
 				<-make(chan bool)
 			}
 		} else if m.cmd == "Left" {
-			if p.x > 20 {
+			if p.x > 12 {
 				p.vx = -80
+			} else {
+				p.vx = 0
 			}
 		} else if m.cmd == "Stop" {
 			p.vx = 0
 		} else if m.cmd == "Right" {
-			if p.x < 490 {
+			if p.x < 500 {
 				p.vx = 80
+			} else {
+				p.vx = 0
 			}
 		} else if m.cmd == "Shoot" {
 			ms.generalChannel <- msg{cmd: "Add", val: "Bullet", p: spaceShip{x: p.x, y: p.y, vx: 0, vy: 100}}
@@ -135,7 +139,7 @@ func (p *spaceShip) actions() { // for spaceShip (player)
 }
 
 func (m *motherShip) actions() { // for motherShip (enemy o barrier)
-	for {
+	for !window.Closed() {
 		select {
 		case message := <-m.registerChannel:
 			if message.cmd == "Set" {
@@ -252,16 +256,22 @@ func (m *motherShip) actions() { // for motherShip (enemy o barrier)
 					}
 					window.Clear(colornames.Black)
 					imd.Draw(window)
+
 					basicAtlas := text.NewAtlas(basicfont.Face7x13, text.ASCII)
-					basicTxt := text.New(pixel.V(100, 500), basicAtlas)
-					fmt.Fprintln(basicTxt, "Score: ", score)
-					fmt.Fprintln(basicTxt, "Lives: ", live)
-					basicTxt.Draw(window, pixel.IM)
+					tvScore := text.New(pixel.V(15, 490), basicAtlas)
+					tvLives := text.New(pixel.V(410, 490), basicAtlas)
+
+					fmt.Fprintln(tvScore, "Score: ", score)
+					fmt.Fprintln(tvLives, "Lives: ", live)
+					tvScore.Draw(window, pixel.IM.Scaled(tvScore.Orig, 1.25))
+					tvLives.Draw(window, pixel.IM.Scaled(tvLives.Orig, 1.25))
 					window.Update()
 				}
 			}
 		}
 	}
+	window.Destroy()
+	os.Exit(1)
 }
 
 func populate() {
@@ -286,7 +296,13 @@ func populate() {
 }
 
 func start() {
-	window, _ = pixelgl.NewWindow(pixelgl.WindowConfig{Title: "* Space Invaders *", Bounds: pixel.R(0, 0, float64(512), float64(512)), VSync: true})
+	cfg := pixelgl.WindowConfig{
+		Title:  "Space Invaders",
+		Bounds: pixel.R(0, 0, float64(512), float64(512)),
+		VSync:  true,
+	}
+
+	window, _ = pixelgl.NewWindow(cfg)
 	window.SetPos(window.GetPos().Add(pixel.V(0, 1)))
 	callGo(ms.conductor)
 	<-make(chan bool)
@@ -296,7 +312,7 @@ func main() {
 	channelSpeed = 8
 	shipSpeed = 17
 	live = 10
-	flag.IntVar(&numAliens, "aliens", 800, "Number of aliens")
+	flag.IntVar(&numAliens, "aliens", 50, "Number of aliens")
 
 	flag.Parse()
 	pixelgl.Run(start)
