@@ -122,6 +122,7 @@ func run() {
 		dt := time.Since(last).Seconds()
 		last = time.Now()
 
+		win.Clear(colornames.Black)
 		world.Draw(win)
 
 		if win.Pressed(pixelgl.KeyLeft) {
@@ -141,6 +142,8 @@ func run() {
 		player.Update(direction, action, dt)
 		player.Draw(win)
 		direction = spacegame.Idle
+		action = spacegame.NoneAction
+
 		win.Update()
 	}
 }

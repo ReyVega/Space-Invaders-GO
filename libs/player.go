@@ -17,8 +17,8 @@ type Player struct {
 const (
 	playerVel    = 250.0
 	laserImg     = "assets/textures/world.png"
-	laserVel     = 270.0
-	rechargeTime = 35
+	laserVel     = 400.0
+	rechargeTime = 20
 )
 
 var (
