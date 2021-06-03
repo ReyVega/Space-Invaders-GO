@@ -4,8 +4,10 @@ import (
 	"log"
 	"image"
 	_ "image/png"
+	"log"
 	"os"
 	spacegame "spaceInvaders/libs"
+	"time"
 
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
@@ -84,20 +86,46 @@ func run() {
 	}
 
 	win, err := pixelgl.NewWindow(cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	world := spacegame.NewWorld(windowWidth, windowHeight)
 	if err := world.AddBackground("assets/textures/background.png"); err != nil {
 		log.Fatal(err)
 	}
 
+	player, err := spacegame.NewPlayer("assets/textures/ship.png", 5, world)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
+	direction := spacegame.Idle
+	last := time.Now()
+	action := spacegame.NoneAction
+
 	for !win.Closed() {
+		dt := time.Since(last).Seconds()
+		last = time.Now()
+
 		world.Draw(win)
+
+		if win.Pressed(pixelgl.KeyLeft) {
+			direction = spacegame.LeftDirection
+		}
+
+		if win.Pressed(pixelgl.KeyRight) {
+			direction = spacegame.RightDirection
+		}
+		if win.Pressed(pixelgl.KeySpace) {
+			action = spacegame.ShootAction
+		}
+
 		createEnemies(win)
 
+		player.Update(direction, action, dt)
+		player.Draw(win)
+		direction = spacegame.Idle
 		win.Update()
 	}
 }
