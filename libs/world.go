@@ -22,7 +22,6 @@ func (w *World) AddBackground(path string) error {
 	if err != nil {
 		return err
 	}
-
 	w.bg = bg
 	return nil
 }
@@ -41,6 +40,5 @@ func (w World) Draw(t pixel.Target) {
 			spriteBg.Draw(bgBatch, pixel.IM.Moved(pos))
 		}
 	}
-
 	bgBatch.Draw(t)
 }
