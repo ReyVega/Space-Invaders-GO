@@ -17,8 +17,8 @@ type Player struct {
 const (
 	playerVel    = 250.0
 	laserImg     = "assets/textures/world.png"
-	laserVel     = 270.0
-	rechargeTime = 35
+	laserVel     = 400.0
+	rechargeTime = 20
 )
 
 var (
@@ -27,7 +27,7 @@ var (
 
 func NewPlayer(path string, life int, world *World) (*Player, error) {
 	// Initialize sprite to use with the player
-	pic, err := loadPicture(path)
+	pic, err := NewloadPicture(path)
 	if err != nil {
 		return nil, err
 	}

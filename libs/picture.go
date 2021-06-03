@@ -8,7 +8,7 @@ import (
 	"github.com/faiface/pixel"
 )
 
-func loadPicture(path string) (pixel.Picture, error) {
+func NewloadPicture(path string) (pixel.Picture, error) {
 	f, err := os.Open(path)
 	if err != nil {
 		return nil, err
