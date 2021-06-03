@@ -8,7 +8,9 @@ import (
 	spacegame "spaceInvaders/libs"
 
 	"github.com/faiface/pixel"
+	"github.com/faiface/pixel/imdraw"
 	"github.com/faiface/pixel/pixelgl"
+	"golang.org/x/image/colornames"
 )
 
 const (
@@ -29,9 +31,22 @@ func loadPicture(path string) (pixel.Picture, error) {
 	return pixel.PictureDataFromImage(img), nil
 }
 
-// func createFortress() {
+func createFortress(win *pixelgl.Window) {
+	//Setup 3x4x4
+	for i := 0; i < 3; i++ {
+		for j := 0; j < 4; j++ {
+			for k := 0; k < 4; k++ {
+				imd := imdraw.New(nil)
+				imd.Color = colornames.White
+				imd.Push(pixel.V(float64(65+30+k*18+j*173), float64(80+i*18)))
+				imd.Push(pixel.V(float64(83+30+k*18+j*173), float64(98+i*18)))
+				imd.Rectangle(3)
+				imd.Draw(win)
+			}
+		}
+	}
 
-// }
+}
 
 func createEnemies(window *pixelgl.Window) {
 	pic1, err := loadPicture("assets/textures/spritealien1.png")
@@ -97,6 +112,7 @@ func run() {
 	for !win.Closed() {
 		world.Draw(win)
 		createEnemies(win)
+		createFortress(win)
 
 		win.Update()
 	}
