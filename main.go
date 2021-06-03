@@ -1,13 +1,19 @@
 package main
 
 import (
-	"github.com/faiface/pixel"
-	"github.com/faiface/pixel/pixelgl"
-	"golang.org/x/image/colornames"
-
 	"image"
 	_ "image/png"
+	"log"
 	"os"
+	spacegame "spaceInvaders/libs"
+
+	"github.com/faiface/pixel"
+	"github.com/faiface/pixel/pixelgl"
+)
+
+const (
+	windowWidth  = 800
+	windowHeight = 600
 )
 
 func loadPicture(path string) (pixel.Picture, error) {
@@ -45,7 +51,6 @@ func createEnemies(window *pixelgl.Window) {
 	// if err != nil {
 	// 	panic(err)
 	// }
-
 	spriteAlien1 := pixel.NewSprite(pic1, pic1.Bounds())
 	spriteAlien2 := pixel.NewSprite(pic2, pic2.Bounds())
 	spriteAlien3 := pixel.NewSprite(pic3, pic3.Bounds())
@@ -68,28 +73,32 @@ func createEnemies(window *pixelgl.Window) {
 			}
 		}
 	}
-
 	//spriteAlien4.Draw(window, mat)
 }
 
 func run() {
 	cfg := pixelgl.WindowConfig{
 		Title:  "Space Invaders",
-		Bounds: pixel.R(0, 0, float64(800), float64(600)),
+		Bounds: pixel.R(0, 0, windowWidth, windowHeight),
 		VSync:  true,
 	}
 
-	window, _ := pixelgl.NewWindow(cfg)
-	window.SetPos(window.GetPos().Add(pixel.V(0, 1)))
+	win, err := pixelgl.NewWindow(cfg)
 
-	window.Clear(colornames.Black)
+	world := spacegame.NewWorld(windowWidth, windowHeight)
+	if err := world.AddBackground("assets/textures/background.png"); err != nil {
+		log.Fatal(err)
+	}
 
-	createEnemies(window)
+	if err != nil {
+		panic(err)
+	}
 
-	//draw texts
+	for !win.Closed() {
+		world.Draw(win)
+		createEnemies(win)
 
-	for !window.Closed() {
-		window.Update()
+		win.Update()
 	}
 }
 
