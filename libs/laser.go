@@ -12,7 +12,7 @@ type Laser struct {
 }
 
 func NewBaseLaser(path string, vel float64, world *World) (*Laser, error) {
-	pic, err := loadPicture(path)
+	pic, err := NewloadPicture(path)
 	if err != nil {
 		return nil, err
 	}

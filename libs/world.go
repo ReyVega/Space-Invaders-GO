@@ -18,7 +18,7 @@ func NewWorld(w, h float64) *World {
 }
 
 func (w *World) AddBackground(path string) error {
-	bg, err := loadPicture(path)
+	bg, err := NewloadPicture(path)
 	if err != nil {
 		return err
 	}
