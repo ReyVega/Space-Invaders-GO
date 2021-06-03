@@ -51,6 +51,7 @@ var shipSpeed int
 var numAliens int
 var score int
 var live int
+var shoot bool
 
 func callGo(f func()) {
 	atomic.AddUint64(&gos, 1)
@@ -107,7 +108,16 @@ func (p *spaceShip) actions() { // for spaceShip (player)
 				p.vx = 0
 			}
 		} else if m.cmd == "Shoot" {
-			ms.generalChannel <- msg{cmd: "Add", val: "Bullet", p: spaceShip{x: p.x, y: p.y, vx: 0, vy: 100}}
+			if p.x <= 12 {
+				p.vx = 0
+			}
+			if p.x >= 500 {
+				p.vx = 0
+			}
+			if shoot {
+				ms.generalChannel <- msg{cmd: "Add", val: "Bullet", p: spaceShip{x: p.x, y: p.y, vx: 0, vy: 100}}
+				shoot = false
+			}
 		}
 		if m.cmd == "Move" {
 			var xPixPerBeat = p.vx / 1000 * float64(shipSpeed)
@@ -304,6 +314,14 @@ func start() {
 
 	window, _ = pixelgl.NewWindow(cfg)
 	window.SetPos(window.GetPos().Add(pixel.V(0, 1)))
+
+	go func() {
+		ticker := time.NewTicker(time.Second / 2)
+		for _ = range ticker.C {
+			shoot = true
+		}
+	}()
+
 	callGo(ms.conductor)
 	<-make(chan bool)
 }
@@ -312,7 +330,7 @@ func main() {
 	channelSpeed = 8
 	shipSpeed = 17
 	live = 10
-	flag.IntVar(&numAliens, "aliens", 50, "Number of aliens")
+	flag.IntVar(&numAliens, "aliens", 10, "Number of aliens")
 
 	flag.Parse()
 	pixelgl.Run(start)
