@@ -107,3 +107,7 @@ func (p *Player) shoot(action Action, dt float64) {
 		laserDelay = rechargeTime
 	}
 }
+
+func (p *Player) GetLife() int {
+	return p.life
+}

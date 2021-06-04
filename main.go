@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	_ "image/png"
 	"log"
 	spacegame "spaceInvaders/libs"
@@ -8,7 +9,9 @@ import (
 
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
+	"github.com/faiface/pixel/text"
 	"golang.org/x/image/colornames"
+	"golang.org/x/image/font/basicfont"
 )
 
 const (
@@ -68,6 +71,13 @@ func run() {
 		direction = spacegame.Idle
 		action = spacegame.NoneAction
 
+		basicAtlas := text.NewAtlas(basicfont.Face7x13, text.ASCII)
+		tvScore := text.New(pixel.V(20, 570), basicAtlas)
+		tvLives := text.New(pixel.V(690, 570), basicAtlas)
+		fmt.Fprintln(tvScore, "Score: ", 0)
+		fmt.Fprintln(tvLives, "Lives: ", player.GetLife())
+		tvScore.Draw(win, pixel.IM.Scaled(tvScore.Orig, 1.5))
+		tvLives.Draw(win, pixel.IM.Scaled(tvLives.Orig, 1.5))
 		win.Update()
 	}
 }
