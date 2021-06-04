@@ -27,7 +27,7 @@ var (
 
 func NewPlayer(path string, life int, world *World) (*Player, error) {
 	// Initialize sprite to use with the player
-	pic, err := loadPicture(path)
+	pic, err := NewloadPicture(path)
 	if err != nil {
 		return nil, err
 	}
@@ -106,4 +106,8 @@ func (p *Player) shoot(action Action, dt float64) {
 		p.lasers[NewULID()] = l
 		laserDelay = rechargeTime
 	}
+}
+
+func (p *Player) GetLife() int {
+	return p.life
 }
