@@ -44,6 +44,8 @@ func run() {
 	direction := spacegame.Idle
 	last := time.Now()
 	action := spacegame.NoneAction
+	var isRunning bool = true
+	basicAtlas := text.NewAtlas(basicfont.Face7x13, text.ASCII)
 
 	for !win.Closed() {
 		dt := time.Since(last).Seconds()
@@ -52,32 +54,41 @@ func run() {
 		win.Clear(colornames.Black)
 		world.Draw(win)
 
-		if win.Pressed(pixelgl.KeyLeft) {
-			direction = spacegame.LeftDirection
+		if isRunning {
+			if win.Pressed(pixelgl.KeyLeft) {
+				direction = spacegame.LeftDirection
+			}
+
+			if win.Pressed(pixelgl.KeyRight) {
+				direction = spacegame.RightDirection
+			}
+			if win.Pressed(pixelgl.KeySpace) {
+				action = spacegame.ShootAction
+			}
+
+			spacegame.NewCreateEnemies(win)
+			spacegame.NewCreateFortress(win)
+
+			player.Update(direction, action, dt)
+			player.Draw(win)
+			direction = spacegame.Idle
+			action = spacegame.NoneAction
+
+			tvScore := text.New(pixel.V(20, 570), basicAtlas)
+			tvLives := text.New(pixel.V(690, 570), basicAtlas)
+			fmt.Fprintln(tvScore, "Score: ", 0)
+			fmt.Fprintln(tvLives, "Lives: ", player.GetLife())
+			tvScore.Draw(win, pixel.IM.Scaled(tvScore.Orig, 1.5))
+			tvLives.Draw(win, pixel.IM.Scaled(tvLives.Orig, 1.5))
+		} else {
+			tvPause := text.New(pixel.V(windowWidth/2-70, windowHeight/2), basicAtlas)
+			fmt.Fprintln(tvPause, "Paused")
+			tvPause.Draw(win, pixel.IM.Scaled(tvPause.Orig, 4))
 		}
 
-		if win.Pressed(pixelgl.KeyRight) {
-			direction = spacegame.RightDirection
+		if win.JustPressed(pixelgl.KeyP) {
+			isRunning = !isRunning
 		}
-		if win.Pressed(pixelgl.KeySpace) {
-			action = spacegame.ShootAction
-		}
-
-		spacegame.NewCreateEnemies(win)
-		spacegame.NewCreateFortress(win)
-
-		player.Update(direction, action, dt)
-		player.Draw(win)
-		direction = spacegame.Idle
-		action = spacegame.NoneAction
-
-		basicAtlas := text.NewAtlas(basicfont.Face7x13, text.ASCII)
-		tvScore := text.New(pixel.V(20, 570), basicAtlas)
-		tvLives := text.New(pixel.V(690, 570), basicAtlas)
-		fmt.Fprintln(tvScore, "Score: ", 0)
-		fmt.Fprintln(tvLives, "Lives: ", player.GetLife())
-		tvScore.Draw(win, pixel.IM.Scaled(tvScore.Orig, 1.5))
-		tvLives.Draw(win, pixel.IM.Scaled(tvLives.Orig, 1.5))
 		win.Update()
 	}
 }
