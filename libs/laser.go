@@ -11,6 +11,10 @@ type Laser struct {
 	sprite    *pixel.Sprite
 }
 
+func (l *Laser) GetLaserPos() *pixel.Vec {
+	return l.pos
+}
+
 func NewBaseLaser(path string, vel float64, world *World) (*Laser, error) {
 	pic, err := NewloadPicture(path)
 	if err != nil {
