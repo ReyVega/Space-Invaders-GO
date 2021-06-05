@@ -49,7 +49,7 @@ func run() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	var totalEnemies int = len(enemies)
+
 	var deadFortress [16]int
 	coordenadasFortalezas := spacegame.NewCreateFortress(win, deadFortress)
 
@@ -111,13 +111,18 @@ func run() {
 				coordenadasFortalezas, deadFortress = enemies[i].CheckFortressInvaders(coordenadasFortalezas, deadFortress)
 				var wasShot bool = enemies[i].CheckBullet(player)
 				var lostLife bool = player.CheckBulletPlayer(enemies[i])
+				var invaderToLimit bool = enemies[i].CheckLimitInvader()
 
 				if wasShot {
 					enemies = append(enemies[:i], enemies[i+1:]...)
 					score += 25
-					if score == totalEnemies*25 {
+					if len(enemies) <= 0 {
 						gameWon = true
 					}
+				}
+
+				if invaderToLimit {
+					gameOver = true
 				}
 
 				if lostLife {
@@ -206,7 +211,7 @@ func run() {
 }
 
 func main() {
-	numberOfEnemies = 50
+	numberOfEnemies = 10
 	numberOfLives = 10
 	pixelgl.Run(run)
 }
