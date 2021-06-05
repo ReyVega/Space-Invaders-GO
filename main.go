@@ -41,7 +41,8 @@ func run() {
 		log.Fatal(err)
 	}
 
-	enemies, err := spacegame.NewEnemies(win)
+  //50 is the standard for alien number
+	enemies, err := spacegame.NewCreateEnemies(win, 50)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -119,6 +120,9 @@ func run() {
 			}
 
 			spacegame.NewCreateFortress(win)
+
+			coordenadasFortalezas := spacegame.NewCreateFortress(win)
+			fmt.Println(coordenadasFortalezas[1])
 
 			player.Update(direction, action, dt)
 			player.Draw(win)

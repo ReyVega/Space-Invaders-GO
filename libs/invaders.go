@@ -13,9 +13,12 @@ type Invader struct {
 	sprite *pixel.Sprite
 }
 
-func NewEnemies(win *pixelgl.Window) ([]Invader, error) {
-	var invaders []Invader
+func NewCreateEnemies(window *pixelgl.Window, numAliens int)  ([]Invader, error)  {
+  // Arreglo de invaders
+  var invaders []Invader
 
+	//estandar 50 num de aliens
+	contador := 0
 	for x := 0; x < 5; x++ {
 		for i := 0; i < 10; i++ {
 			pos := pixel.V(win.Bounds().Center().X+float64(i)*50-240.0, win.Bounds().Center().Y+float64(x)*40+100)
@@ -40,6 +43,10 @@ func NewEnemies(win *pixelgl.Window) ([]Invader, error) {
 					log.Fatal(err)
 				}
 				invaders = append(invaders, *invader)
+			}
+			contador++
+			if contador >= numAliens {
+				break
 			}
 		}
 	}
