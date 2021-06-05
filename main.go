@@ -184,19 +184,19 @@ func run() {
 
 		if gameWon {
 			isRunning = false
-			wonImg, err := spacegame.NewloadPicture("assets/textures/gamewon.png")
+			wonImg, err := spacegame.NewloadPicture("assets/textures/gamewon2.png")
 			won := pixel.NewSprite(wonImg, wonImg.Bounds())
 			mat := pixel.IM
-			mat = mat.Moved(pixel.V(win.Bounds().Center().X, win.Bounds().Center().Y))
-			mat = mat.Scaled(pixel.V(win.Bounds().Center().X, win.Bounds().Center().Y), 0.8)
+			mat = mat.Moved(pixel.V(win.Bounds().Center().X+125, win.Bounds().Center().Y))
+			mat = mat.Scaled(pixel.V(win.Bounds().Center().X, win.Bounds().Center().Y), 0.9)
 			won.Draw(win, mat)
 			if err != nil {
 				panic(err)
 			}
 
-			tvFinalScore := text.New(pixel.V(windowWidth/2-100, windowHeight/2-225), basicAtlas)
+			tvFinalScore := text.New(pixel.V(windowWidth/2+40, windowHeight/2-295), basicAtlas)
 			fmt.Fprintln(tvFinalScore, "Final Score: ", score)
-			tvFinalScore.Draw(win, pixel.IM.Scaled(tvFinalScore.Orig, 2))
+			tvFinalScore.Draw(win, pixel.IM.Scaled(tvFinalScore.Orig, 1.75))
 		}
 		win.Update()
 	}
