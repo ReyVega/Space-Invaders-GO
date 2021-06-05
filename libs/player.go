@@ -53,22 +53,21 @@ func NewPlayer(path string, life int, world *World) (*Player, error) {
 	}, nil
 }
 
-func (p Player) CheckFortress(coordenadasFortress [96]pixel.Vec, deadFortress [48]int) (coordenadasFortalezas [96]pixel.Vec, deadFortalezas [48]int) {
+func (p Player) CheckFortress(coordenadasFortress [32]pixel.Vec, deadFortress [16]int) (coordenadasFortalezas [32]pixel.Vec, deadFortalezas [16]int) {
 	for k, l := range p.lasers {
 		l.Update()
-		for i := 0; i < 48; i += 2 {
-
-			if l.pos.X >= coordenadasFortress[i].X && l.pos.X <= coordenadasFortress[i+1].X && l.pos.Y >= coordenadasFortress[i].Y && l.pos.Y <= coordenadasFortress[i+1].Y {
+		for i := 0; i < 16; i++ {
+			if l.pos.X >= coordenadasFortress[i*2].X && l.pos.X <= coordenadasFortress[i*2+1].X && l.pos.Y >= coordenadasFortress[i*2].Y && l.pos.Y <= coordenadasFortress[i*2+1].Y {
 
 				delete(p.lasers, k)
 				deadFortress[i] = 1
-				coordenadasFortress[i] = pixel.V(0, 0)
-				coordenadasFortress[i+1] = pixel.V(0, 0)
+				coordenadasFortress[i*2] = pixel.V(0, 0)
+				coordenadasFortress[i*2+1] = pixel.V(0, 0)
 			}
 		}
 
 	}
-	return coordenadasFortalezas, deadFortalezas
+	return coordenadasFortress, deadFortress
 }
 
 func (p Player) Draw(t pixel.Target) {
