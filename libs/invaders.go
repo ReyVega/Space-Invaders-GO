@@ -13,9 +13,9 @@ type Invader struct {
 	sprite *pixel.Sprite
 }
 
-func NewCreateEnemies(window *pixelgl.Window, numAliens int)  ([]Invader, error)  {
-  // Arreglo de invaders
-  var invaders []Invader
+func NewCreateEnemies(win *pixelgl.Window, numAliens int) ([]Invader, error) {
+	// Arreglo de invaders
+	var invaders []Invader
 
 	//estandar 50 num de aliens
 	contador := 0
