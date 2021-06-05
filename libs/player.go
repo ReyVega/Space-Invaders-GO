@@ -129,3 +129,24 @@ func (p *Player) shoot(action Action, dt float64) {
 func (p *Player) GetLife() int {
 	return p.life
 }
+
+func (p *Player) SetLife(l int) {
+	p.life = l
+}
+
+func (player *Player) CheckBulletPlayer(inv Invader) bool {
+	var x int = 0
+	var y int = 0
+
+	for k, l := range inv.lasers {
+		x = int(l.pos.X)
+		y = int(l.pos.Y)
+
+		if (int(player.pos.X)-20 < x && x < int(player.pos.X)+20) && (int(player.pos.Y)-12 < y && y < int(player.pos.Y)+12) {
+			delete(inv.lasers, k)
+			//print("HOLA")
+			return true
+		}
+	}
+	return false
+}

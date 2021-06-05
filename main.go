@@ -46,6 +46,7 @@ func run() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	var totalEnemies int = len(enemies)
 	var deadFortress [16]int
 	coordenadasFortalezas := spacegame.NewCreateFortress(win, deadFortress)
 
@@ -54,7 +55,10 @@ func run() {
 	action := spacegame.NoneAction
 	var isRunning bool = true
 	var firstTime bool = true
+	var gameOver bool = false
+	var gameWon bool = false
 	var cont int = 0
+	var score int = 0
 	var enemiesMovementX = true
 	var enemiesMovementY = false
 	basicAtlas := text.NewAtlas(basicfont.Face7x13, text.ASCII)
@@ -103,9 +107,21 @@ func run() {
 				enemies[i].Update(enemiesMovementX, enemiesMovementY, dt)
 				coordenadasFortalezas, deadFortress = enemies[i].CheckFortressInvaders(coordenadasFortalezas, deadFortress)
 				var wasShot bool = enemies[i].CheckBullet(player)
+				var lostLife bool = player.CheckBulletPlayer(enemies[i])
 
 				if wasShot {
 					enemies = append(enemies[:i], enemies[i+1:]...)
+					score += 25
+					if score == totalEnemies*25 {
+						gameWon = true
+					}
+				}
+
+				if lostLife {
+					player.SetLife(player.GetLife() - 1)
+					if player.GetLife() <= 0 {
+						gameOver = true
+					}
 				}
 			}
 
@@ -136,11 +152,11 @@ func run() {
 
 			tvScore := text.New(pixel.V(20, 570), basicAtlas)
 			tvLives := text.New(pixel.V(690, 570), basicAtlas)
-			fmt.Fprintln(tvScore, "Score:", 0)
+			fmt.Fprintln(tvScore, "Score:", score)
 			fmt.Fprintln(tvLives, "Lives:", player.GetLife())
 			tvScore.Draw(win, pixel.IM.Scaled(tvScore.Orig, 1.5))
 			tvLives.Draw(win, pixel.IM.Scaled(tvLives.Orig, 1.5))
-		} else if !firstTime {
+		} else if !firstTime && !gameOver && !gameWon {
 			tvPause := text.New(pixel.V(windowWidth/2-70, windowHeight/2), basicAtlas)
 			fmt.Fprintln(tvPause, "Paused")
 			tvPause.Draw(win, pixel.IM.Scaled(tvPause.Orig, 4))
@@ -148,6 +164,39 @@ func run() {
 
 		if win.JustPressed(pixelgl.KeyP) && !firstTime {
 			isRunning = !isRunning
+		}
+
+		if gameOver {
+			isRunning = false
+			overImg, err := spacegame.NewloadPicture("assets/textures/gameover.png")
+			over := pixel.NewSprite(overImg, overImg.Bounds())
+			mat := pixel.IM
+			mat = mat.Moved(pixel.V(win.Bounds().Center().X, win.Bounds().Center().Y))
+			over.Draw(win, mat)
+			if err != nil {
+				panic(err)
+			}
+
+			tvFinalScore := text.New(pixel.V(windowWidth/2-100, windowHeight/2-225), basicAtlas)
+			fmt.Fprintln(tvFinalScore, "Final Score: ", score)
+			tvFinalScore.Draw(win, pixel.IM.Scaled(tvFinalScore.Orig, 2))
+		}
+
+		if gameWon {
+			isRunning = false
+			wonImg, err := spacegame.NewloadPicture("assets/textures/gamewon.png")
+			won := pixel.NewSprite(wonImg, wonImg.Bounds())
+			mat := pixel.IM
+			mat = mat.Moved(pixel.V(win.Bounds().Center().X, win.Bounds().Center().Y))
+			mat = mat.Scaled(pixel.V(win.Bounds().Center().X, win.Bounds().Center().Y), 0.8)
+			won.Draw(win, mat)
+			if err != nil {
+				panic(err)
+			}
+
+			tvFinalScore := text.New(pixel.V(windowWidth/2-100, windowHeight/2-225), basicAtlas)
+			fmt.Fprintln(tvFinalScore, "Final Score: ", score)
+			tvFinalScore.Draw(win, pixel.IM.Scaled(tvFinalScore.Orig, 2))
 		}
 		win.Update()
 	}
