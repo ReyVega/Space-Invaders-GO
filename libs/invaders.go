@@ -173,3 +173,11 @@ func (inv *Invader) CheckBullet(player *Player) bool {
 	}
 	return false
 }
+
+func (inv *Invader) CheckLimitInvader() bool {
+	if inv.pos.Y <= 50 {
+		return true
+	} else {
+		return false
+	}
+}
