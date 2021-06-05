@@ -78,7 +78,7 @@ func NewInvader(path string, pos pixel.Vec, world *World) (*Invader, error) {
 
 	invader := &Invader{
 		pos:        &initialPos,
-		vel:        100.00,
+		vel:        1.80,
 		sprite:     spr,
 		laser:      l,
 		laserDelay: 30,
@@ -99,7 +99,7 @@ func (inv Invader) Draw(t pixel.Target) {
 }
 
 func (inv *Invader) Update(movementX bool, movementY bool, dt float64) {
-	go move(inv, dt, movementX, movementY)
+	go move(inv, movementX, movementY)
 
 	if rand.Intn((500-0)+0) > 480 {
 		inv.shoot(dt)
@@ -115,11 +115,11 @@ func (inv *Invader) Update(movementX bool, movementY bool, dt float64) {
 	}
 }
 
-func move(invader *Invader, dt float64, movementX bool, movementY bool) {
+func move(invader *Invader, movementX bool, movementY bool) {
 	if movementX {
-		invader.pos.X = invader.pos.X - (invader.vel * dt)
+		invader.pos.X = invader.pos.X - (invader.vel)
 	} else {
-		invader.pos.X = invader.pos.X + (invader.vel * dt)
+		invader.pos.X = invader.pos.X + (invader.vel)
 	}
 
 	if movementY {

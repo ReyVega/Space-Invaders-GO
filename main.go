@@ -112,12 +112,12 @@ func run() {
 				cont--
 			}
 
-			if cont == windowWidth/12 {
+			if cont == windowWidth/10 {
 				enemiesMovementX = false
 				enemiesMovementY = true
 			}
 
-			if cont == windowWidth/7*-1 {
+			if cont == windowWidth/8*-1 {
 				enemiesMovementX = true
 				enemiesMovementY = true
 			}
