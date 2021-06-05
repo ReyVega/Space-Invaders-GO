@@ -45,6 +45,7 @@ func run() {
 	last := time.Now()
 	action := spacegame.NoneAction
 	var isRunning bool = true
+	var firstTime bool = true
 	basicAtlas := text.NewAtlas(basicfont.Face7x13, text.ASCII)
 
 	for !win.Closed() {
@@ -54,7 +55,27 @@ func run() {
 		win.Clear(colornames.Black)
 		world.Draw(win)
 
-		if isRunning {
+		if firstTime {
+
+			logoImg, err := spacegame.NewloadPicture("assets/textures/logo.png")
+			logo := pixel.NewSprite(logoImg, logoImg.Bounds())
+			mat := pixel.IM
+			mat = mat.Moved(pixel.V(win.Bounds().Center().X, win.Bounds().Center().Y+175))
+			mat = mat.Scaled(pixel.V(win.Bounds().Center().X, win.Bounds().Center().Y), 0.5)
+			logo.Draw(win, mat)
+			if err != nil {
+				panic(err)
+			}
+
+			tvMenu := text.New(pixel.V(windowWidth/2-150, windowHeight/2-175), basicAtlas)
+			fmt.Fprintln(tvMenu, "Press ENTER to start")
+			tvMenu.Draw(win, pixel.IM.Scaled(tvMenu.Orig, 2))
+			if win.JustPressed(pixelgl.KeyEnter) {
+				firstTime = false
+			}
+		}
+
+		if isRunning && !firstTime {
 			if win.Pressed(pixelgl.KeyLeft) {
 				direction = spacegame.LeftDirection
 			}
@@ -80,13 +101,13 @@ func run() {
 			fmt.Fprintln(tvLives, "Lives: ", player.GetLife())
 			tvScore.Draw(win, pixel.IM.Scaled(tvScore.Orig, 1.5))
 			tvLives.Draw(win, pixel.IM.Scaled(tvLives.Orig, 1.5))
-		} else {
+		} else if !firstTime {
 			tvPause := text.New(pixel.V(windowWidth/2-70, windowHeight/2), basicAtlas)
 			fmt.Fprintln(tvPause, "Paused")
 			tvPause.Draw(win, pixel.IM.Scaled(tvPause.Orig, 4))
 		}
 
-		if win.JustPressed(pixelgl.KeyP) {
+		if win.JustPressed(pixelgl.KeyP) && !firstTime {
 			isRunning = !isRunning
 		}
 		win.Update()
