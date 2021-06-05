@@ -157,3 +157,19 @@ func (inv *Invader) CheckFortressInvaders(coordenadasFortress [32]pixel.Vec, dea
 	}
 	return coordenadasFortress, deadFortress
 }
+
+func (inv *Invader) CheckBullet(player *Player) bool {
+	var x int = 0
+	var y int = 0
+
+	for k, l := range player.lasers {
+		x = int(l.pos.X)
+		y = int(l.pos.Y)
+
+		if (int(inv.pos.X)-8 < x && x < int(inv.pos.X)+8) && (int(inv.pos.Y)-8 < y && y < int(inv.pos.Y)+8) {
+			delete(player.lasers, k)
+			return true
+		}
+	}
+	return false
+}
