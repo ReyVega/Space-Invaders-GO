@@ -102,6 +102,11 @@ func run() {
 				enemies[i].Draw(win)
 				enemies[i].Update(enemiesMovementX, enemiesMovementY, dt)
 				coordenadasFortalezas, deadFortress = enemies[i].CheckFortressInvaders(coordenadasFortalezas, deadFortress)
+				var wasShot bool = enemies[i].CheckBullet(player)
+
+				if wasShot {
+					enemies = append(enemies[:i], enemies[i+1:]...)
+				}
 			}
 
 			enemiesMovementY = false
