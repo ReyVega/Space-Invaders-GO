@@ -41,11 +41,20 @@ func run() {
 		log.Fatal(err)
 	}
 
+  //50 is the standard for alien number
+	enemies, err := spacegame.NewCreateEnemies(win, 50)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	direction := spacegame.Idle
 	last := time.Now()
 	action := spacegame.NoneAction
 	var isRunning bool = true
 	var firstTime bool = true
+	var cont int = 220
+	var enemiesMovementX = true
+	var enemiesMovementY = false
 	basicAtlas := text.NewAtlas(basicfont.Face7x13, text.ASCII)
 
 	for !win.Closed() {
@@ -86,9 +95,31 @@ func run() {
 			if win.Pressed(pixelgl.KeySpace) {
 				action = spacegame.ShootAction
 			}
-			//50 is the standard for alien number
-			spacegame.NewCreateEnemies(win, 50)
-			var deadFortress [48]int
+
+			for i := 0; i < len(enemies); i++ {
+				enemies[i].Draw(win)
+				enemies[i].Update(enemiesMovementX, enemiesMovementY, dt)
+			}
+
+			enemiesMovementY = false
+
+			if enemiesMovementX {
+				cont++
+			} else {
+				cont--
+			}
+
+			if cont == 370 {
+				enemiesMovementX = false
+				enemiesMovementY = true
+			}
+
+			if cont == 0 {
+				enemiesMovementX = true
+				enemiesMovementY = true
+			}
+      
+      var deadFortress [48]int
 			coordenadasFortalezas := spacegame.NewCreateFortress(win, deadFortress)
 			coordenadasFortalezas, deadFortress = player.CheckFortress(coordenadasFortalezas, deadFortress)
 
@@ -99,8 +130,8 @@ func run() {
 
 			tvScore := text.New(pixel.V(20, 570), basicAtlas)
 			tvLives := text.New(pixel.V(690, 570), basicAtlas)
-			fmt.Fprintln(tvScore, "Score: ", 0)
-			fmt.Fprintln(tvLives, "Lives: ", player.GetLife())
+			fmt.Fprintln(tvScore, "Score:", 0)
+			fmt.Fprintln(tvLives, "Lives:", player.GetLife())
 			tvScore.Draw(win, pixel.IM.Scaled(tvScore.Orig, 1.5))
 			tvLives.Draw(win, pixel.IM.Scaled(tvLives.Orig, 1.5))
 		} else if !firstTime {

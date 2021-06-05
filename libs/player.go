@@ -100,7 +100,6 @@ func (p *Player) Update(direction Direction, action Action, dt float64) {
 func (p *Player) move(direction Direction, dt float64) {
 	switch direction {
 	case LeftDirection:
-
 		newX := p.pos.X - (p.vel * dt)
 		if newX > 14 {
 			p.pos.X = newX
