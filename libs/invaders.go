@@ -5,7 +5,7 @@ import (
 	"github.com/faiface/pixel/pixelgl"
 )
 
-func NewCreateEnemies(window *pixelgl.Window) {
+func NewCreateEnemies(window *pixelgl.Window, numAliens int) {
 	pic1, err := NewloadPicture("assets/textures/spritealien1.png")
 	if err != nil {
 		panic(err)
@@ -27,7 +27,8 @@ func NewCreateEnemies(window *pixelgl.Window) {
 	spriteAlien2 := pixel.NewSprite(pic2, pic2.Bounds())
 	spriteAlien3 := pixel.NewSprite(pic3, pic3.Bounds())
 	//spriteAlien4 := pixel.NewSprite(pic4, pic4.Bounds())
-
+	//estandar 50 num de aliens
+	contador := 0
 	for x := 0; x < 5; x++ {
 		for i := 0; i < 10; i++ {
 			mat := pixel.IM
@@ -42,6 +43,10 @@ func NewCreateEnemies(window *pixelgl.Window) {
 			} else {
 				//Dibujar alien 2
 				spriteAlien2.Draw(window, mat)
+			}
+			contador++
+			if contador >= numAliens {
+				break
 			}
 		}
 	}
