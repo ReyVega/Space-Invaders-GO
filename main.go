@@ -41,11 +41,13 @@ func run() {
 		log.Fatal(err)
 	}
 
-  //50 is the standard for alien number
+	//50 is the standard for alien number
 	enemies, err := spacegame.NewCreateEnemies(win, 50)
 	if err != nil {
 		log.Fatal(err)
 	}
+	var deadFortress [16]int
+	coordenadasFortalezas := spacegame.NewCreateFortress(win, deadFortress)
 
 	direction := spacegame.Idle
 	last := time.Now()
@@ -118,9 +120,7 @@ func run() {
 				enemiesMovementX = true
 				enemiesMovementY = true
 			}
-      
-      var deadFortress [48]int
-			coordenadasFortalezas := spacegame.NewCreateFortress(win, deadFortress)
+			spacegame.NewCreateFortress(win, deadFortress)
 			coordenadasFortalezas, deadFortress = player.CheckFortress(coordenadasFortalezas, deadFortress)
 
 			player.Update(direction, action, dt)
