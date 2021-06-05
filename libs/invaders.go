@@ -55,7 +55,7 @@ func NewCreateEnemies(win *pixelgl.Window, numAliens int, world *World) ([]Invad
 			}
 			contador++
 			if contador >= numAliens {
-				break
+				return invaders, nil
 			}
 		}
 	}
