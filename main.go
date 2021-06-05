@@ -88,8 +88,9 @@ func run() {
 			}
 			//50 is the standard for alien number
 			spacegame.NewCreateEnemies(win, 50)
-			coordenadasFortalezas := spacegame.NewCreateFortress(win)
-			fmt.Println(coordenadasFortalezas[1])
+			var deadFortress [48]int
+			coordenadasFortalezas := spacegame.NewCreateFortress(win, deadFortress)
+			coordenadasFortalezas, deadFortress = player.CheckFortress(coordenadasFortalezas, deadFortress)
 
 			player.Update(direction, action, dt)
 			player.Draw(win)
