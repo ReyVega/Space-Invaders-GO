@@ -19,6 +19,9 @@ const (
 	windowHeight = 600
 )
 
+var numberOfEnemies = 0
+var numberOfLives = 0
+
 func run() {
 	cfg := pixelgl.WindowConfig{
 		Title:  "Space Invaders",
@@ -36,13 +39,13 @@ func run() {
 		log.Fatal(err)
 	}
 
-	player, err := spacegame.NewPlayer("assets/textures/ship.png", 5, world)
+	player, err := spacegame.NewPlayer("assets/textures/ship.png", numberOfLives, world)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	//50 is the standard for alien number
-	enemies, err := spacegame.NewCreateEnemies(win, 50, world)
+	enemies, err := spacegame.NewCreateEnemies(win, numberOfEnemies, world)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -203,5 +206,7 @@ func run() {
 }
 
 func main() {
+	numberOfEnemies = 30
+	numberOfLives = 10
 	pixelgl.Run(run)
 }
