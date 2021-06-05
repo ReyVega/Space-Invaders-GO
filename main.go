@@ -42,7 +42,7 @@ func run() {
 	}
 
 	//50 is the standard for alien number
-	enemies, err := spacegame.NewCreateEnemies(win, 50)
+	enemies, err := spacegame.NewCreateEnemies(win, 50, world)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -54,7 +54,7 @@ func run() {
 	action := spacegame.NoneAction
 	var isRunning bool = true
 	var firstTime bool = true
-	var cont int = 220
+	var cont int = 0
 	var enemiesMovementX = true
 	var enemiesMovementY = false
 	basicAtlas := text.NewAtlas(basicfont.Face7x13, text.ASCII)
@@ -101,6 +101,7 @@ func run() {
 			for i := 0; i < len(enemies); i++ {
 				enemies[i].Draw(win)
 				enemies[i].Update(enemiesMovementX, enemiesMovementY, dt)
+				coordenadasFortalezas, deadFortress = enemies[i].CheckFortressInvaders(coordenadasFortalezas, deadFortress)
 			}
 
 			enemiesMovementY = false
@@ -111,12 +112,12 @@ func run() {
 				cont--
 			}
 
-			if cont == 370 {
+			if cont == windowWidth/12 {
 				enemiesMovementX = false
 				enemiesMovementY = true
 			}
 
-			if cont == 0 {
+			if cont == windowWidth/7*-1 {
 				enemiesMovementX = true
 				enemiesMovementY = true
 			}
