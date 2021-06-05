@@ -1,6 +1,8 @@
 package libs
 
-import "github.com/faiface/pixel"
+import (
+	"github.com/faiface/pixel"
+)
 
 type Player struct {
 	direction Direction
@@ -49,6 +51,24 @@ func NewPlayer(path string, life int, world *World) (*Player, error) {
 		laser:  l,
 		lasers: make(map[string]*Laser),
 	}, nil
+}
+
+func (p Player) CheckFortress(coordenadasFortress [96]pixel.Vec, deadFortress [48]int) (coordenadasFortalezas [96]pixel.Vec, deadFortalezas [48]int) {
+	for k, l := range p.lasers {
+		l.Update()
+		for i := 0; i < 48; i += 2 {
+
+			if l.pos.X >= coordenadasFortress[i].X && l.pos.X <= coordenadasFortress[i+1].X && l.pos.Y >= coordenadasFortress[i].Y && l.pos.Y <= coordenadasFortress[i+1].Y {
+
+				delete(p.lasers, k)
+				deadFortress[i] = 1
+				coordenadasFortress[i] = pixel.V(0, 0)
+				coordenadasFortress[i+1] = pixel.V(0, 0)
+			}
+		}
+
+	}
+	return coordenadasFortalezas, deadFortalezas
 }
 
 func (p Player) Draw(t pixel.Target) {

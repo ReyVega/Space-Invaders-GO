@@ -7,7 +7,7 @@ import (
 	"golang.org/x/image/colornames"
 )
 
-func NewCreateFortress(win *pixelgl.Window) [96]pixel.Vec {
+func NewCreateFortress(win *pixelgl.Window, deadFortress [48]int) [96]pixel.Vec {
 	//Setup 3x4x4
 	var coordenadas [96]pixel.Vec
 	contador := 0
@@ -16,15 +16,20 @@ func NewCreateFortress(win *pixelgl.Window) [96]pixel.Vec {
 			for k := 0; k < 4; k++ {
 				imd := imdraw.New(nil)
 				imd.Color = colornames.White
-				imd.Push(pixel.V(float64(65+30+k*18+j*173), float64(80+i*18)))
-				imd.Push(pixel.V(float64(83+30+k*18+j*173), float64(98+i*18)))
-				coordenadas[contador] = pixel.V(float64(65+30+k*18+j*173), float64(80+i*18))
-				contador++
-				coordenadas[contador] = pixel.V(float64(65+30+k*18+j*173), float64(80+i*18))
-				contador++
+				if deadFortress[contador/2] == 1 {
+					contador += 2
+				} else {
+					imd.Push(pixel.V(float64(65+30+k*18+j*173), float64(80+i*18)))
+					imd.Push(pixel.V(float64(83+30+k*18+j*173), float64(98+i*18)))
+					coordenadas[contador] = pixel.V(float64(65+30+k*18+j*173), float64(80+i*18))
+					contador++
+					coordenadas[contador] = pixel.V(float64(83+30+k*18+j*173), float64(98+i*18))
+					contador++
 
-				imd.Rectangle(3)
-				imd.Draw(win)
+					imd.Rectangle(3)
+					imd.Draw(win)
+				}
+
 			}
 		}
 	}

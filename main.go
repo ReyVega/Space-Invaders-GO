@@ -118,11 +118,10 @@ func run() {
 				enemiesMovementX = true
 				enemiesMovementY = true
 			}
-
-			spacegame.NewCreateFortress(win)
-
-			coordenadasFortalezas := spacegame.NewCreateFortress(win)
-			fmt.Println(coordenadasFortalezas[1])
+      
+      var deadFortress [48]int
+			coordenadasFortalezas := spacegame.NewCreateFortress(win, deadFortress)
+			coordenadasFortalezas, deadFortress = player.CheckFortress(coordenadasFortalezas, deadFortress)
 
 			player.Update(direction, action, dt)
 			player.Draw(win)
