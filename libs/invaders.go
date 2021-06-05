@@ -166,7 +166,7 @@ func (inv *Invader) CheckBullet(player *Player) bool {
 		x = int(l.pos.X)
 		y = int(l.pos.Y)
 
-		if (int(inv.pos.X)-8 < x && x < int(inv.pos.X)+8) && (int(inv.pos.Y)-8 < y && y < int(inv.pos.Y)+8) {
+		if (int(inv.pos.X)-20 < x && x < int(inv.pos.X)+20) && (int(inv.pos.Y)-20 < y && y < int(inv.pos.Y)+20) {
 			delete(player.lasers, k)
 			return true
 		}
