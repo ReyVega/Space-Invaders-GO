@@ -211,7 +211,7 @@ func run() {
 }
 
 func main() {
-	numberOfEnemies = 10
+	numberOfEnemies = 50
 	numberOfLives = 10
 	pixelgl.Run(run)
 }
