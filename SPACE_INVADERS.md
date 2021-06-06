@@ -1,4 +1,5 @@
 # Space Invaders instructions to run the project
+![Space Invaders](assets/textures/InvadersSS.png)
 ### Requisites before running the project
 - Download and install the following packages
     1. sudo apt install -y libgl1-mesa-dev
