@@ -1,10 +1,13 @@
-# Architecture 
+# Architecture
 
+## General structure
+We divided the program in modules
+to make it easier to understand it, we divided the main components into different files and we put them into a lib folder. The most important files are the Fortress, Invaders, Player, and the Lasers.
 ## Concurrency
-![Space Invaders](assets/textures/concurrency.jpg)
+![Concurrency](assets/textures/concurrency.jpg)
 
 ## Project's structure
-![Space Invaders](assets/textures/structureDiagram.jpg)
+![StructureDiagram](assets/textures/structureDiagram.jpg)
 
 ## User experience flow chart
-![Space Invaders](assets/textures/userExperienceFlowChart.jpg)
+![UserExperienceFlowChart](assets/textures/userExperienceFlowChart.jpg)
