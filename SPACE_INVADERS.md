@@ -1,3 +1,4 @@
+# Space Invaders instructions to run the project
 ### Requisites before running the project
 - Download and install the following packages
     1. sudo apt install -y libgl1-mesa-dev
