@@ -11,3 +11,7 @@ to make it easier to understand it, we divided the main components into differen
 
 ## User experience flow chart
 ![UserExperienceFlowChart](assets/textures/userExperienceFlowChart.jpg)
+
+## Sequential diagram
+![SequentialDiagram](assets/textures/SequentialDiagram.jpg)
+
