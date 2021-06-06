@@ -101,7 +101,7 @@ func (inv Invader) Draw(t pixel.Target) {
 func (inv *Invader) Update(movementX bool, movementY bool, dt float64) {
 	go move(inv, movementX, movementY)
 
-	if rand.Intn((500-0)+0) > 480 {
+	if rand.Intn((500-0)+0) > 460 {
 		inv.shoot(dt)
 	}
 
